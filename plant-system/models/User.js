@@ -41,7 +41,8 @@ class User {
     /**
      * USER CONSTRUCTOR
      * Initializes user object with validation and default values
-     * SUPPORTS: UC1 (Registration), UC13 (Profile Management), UC24 (User Management)
+     * SUPPORTS: UC1 (Registration), UC13 (Profile Management), UC24 (User Management),
+     * UC31: Manage Multi-Language Settings
      */
     constructor(userData) {
         this.user_id = userData.user_id;
@@ -52,6 +53,7 @@ class User {
         this.notification_prefs = userData.notification_prefs;
         this.passwordResetToken = userData.password_reset_token;
         this.passwordResetExpires = userData.password_reset_expires;
+        this.languagePreference = userData.language_preference || 'en'; // Default language
         this.created_at = userData.created_at;
     }
 
@@ -393,7 +395,7 @@ class User {
     async update(userData) {
         try {
             // Build dynamic query based on provided fields
-            const validFields = ['full_name', 'notification_prefs', 'role'];
+            const validFields = ['full_name', 'notification_prefs', 'role', 'language_preference'];
             const updates = [];
             const values = [this.user_id]; // First parameter is always user_id
             let paramIndex = 2; // Start parameter index at 2 (user_id is $1)
@@ -403,7 +405,8 @@ class User {
                 if (validFields.includes(key)) {
                     updates.push(`${key === 'full_name' ? 'full_name' : 
                                   key === 'notification_prefs' ? 'notification_prefs' : 
-                                  key === 'role' ? 'role' : key} = $${paramIndex}`);
+                                  key === 'role' ? 'role' : 
+                                  key === 'language_preference' ? 'language_preference' : key} = $${paramIndex}`);
                     values.push(userData[key]);
                     paramIndex++;
                 }
@@ -430,6 +433,7 @@ class User {
                 this.full_name = updatedUser.full_name;
                 this.notification_prefs = updatedUser.notification_prefs;
                 this.role = updatedUser.role;
+                this.languagePreference = updatedUser.language_preference;
             }
             
             return this;

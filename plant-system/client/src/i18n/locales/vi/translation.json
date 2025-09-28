@@ -1,0 +1,44 @@
+{
+  "common": {
+    "submit": "Gửi",
+    "cancel": "Hủy bỏ",
+    "delete": "Xóa",
+    "add": "Thêm",
+    "edit": "Sửa",
+    "save": "Lưu",
+    "close": "Đóng",
+    "back": "Quay lại",
+    "next": "Tiếp theo"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "dashboard": "Bảng điều khiển",
+    "zones": "Khu vườn",
+    "reports": "Báo cáo",
+    "searchReports": "Tìm kiếm báo cáo",
+    "thresholds": "Ngưỡng cảnh báo",
+    "upgrade": "Nâng cấp",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "profile": "Hồ sơ"
+  },
+  "zones": {
+    "title": "Quản lý nhiều khu vườn",
+    "createZone": "Tạo khu vườn",
+    "zoneName": "Tên",
+    "zoneDescription": "Mô tả",
+    "devices": "Thiết bị",
+    "unassignedDevices": "Thiết bị chưa gán",
+    "device": "Thiết bị",
+    "deviceType": "Loại",
+    "assignTo": "Gán vào",
+    "noDevices": "Không còn thiết bị trống",
+    "selectPump": "Chọn bơm cho Zone",
+    "assignPump": "-- Gán bơm cho {{zone}} --",
+    "deleteZoneConfirm": "Xóa khu vườn này?",
+    "deleteZone": "Xóa zone",
+    "zoneDevices": "Thiết bị trong zone",
+    "unassign": "Bỏ gán",
+    "noZoneDevices": "Chưa có thiết bị"
+  }
+}

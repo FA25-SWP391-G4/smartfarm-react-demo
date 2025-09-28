@@ -159,6 +159,7 @@ var indexRouter = require('./routes/index');        // Basic homepage routes
 var usersRouter = require('./routes/users');        // User management routes (basic)
 var authRouter = require('./routes/auth');          // ✅ UC11: Password reset routes (implemented)
 var paymentRouter = require('./routes/payment');    // ✅ UC19, UC22: VNPay payment integration (implemented)
+var languageRouter = require('./routes/language');  // ✅ UC31: Multi-Language Settings
 
 // TODO: Create additional route modules for remaining use cases:
 // var dashboardRouter = require('./routes/dashboard');  // 🔄 UC4: Plant monitoring dashboard
@@ -190,6 +191,7 @@ app.use('/', indexRouter);                          // Basic routes
 app.use('/users', usersRouter);                     // User routes (basic)
 app.use('/auth', authRouter);                       // ✅ UC11: Authentication routes (password reset)
 app.use('/payment', paymentRouter);                 // ✅ UC19, UC22: VNPay payment integration
+app.use('/api/language', languageRouter);           // ✅ UC31: Multi-Language Settings
 
 // TODO: Mount additional route handlers as they are implemented:
 // app.use('/api/dashboard', dashboardRouter);      // 🔄 UC4: Dashboard API

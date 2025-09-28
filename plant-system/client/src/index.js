@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import AuthProvider from "./auth/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./i18n/i18n"; // Import i18n initialization
 
 const root = createRoot(document.getElementById("root"));
 root.render(

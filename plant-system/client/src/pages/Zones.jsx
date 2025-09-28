@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Tabs, Tab, Button, Form, Row, Col, Table, Badge } from "react-bootstrap";
 import zonesApi from "../api/zonesApi";
 import axiosClient from "../api/axiosClient";
+import { useTranslation } from "react-i18next";
 
 export default function Zones() {
+  const { t } = useTranslation();
   const [zones, setZones] = useState([]);
   const [active, setActive] = useState(null);
   const [form, setForm] = useState({ name: "", description: "" });
-  const [devices, setDevices] = useState([]); // tất cả device chưa gán
+  const [devices, setDevices] = useState([]); 
   const [pumps, setPumps] = useState([]);
 
   const loadAll = async () => {
@@ -31,7 +33,7 @@ export default function Zones() {
   };
 
   const onDelete = async (zoneId) => {
-    if (!window.confirm("Xóa khu vườn này?")) return;
+    if (!window.confirm(t('zones.deleteZoneConfirm'))) return;
     await zonesApi.remove(zoneId);
     await loadAll();
   };
@@ -53,28 +55,28 @@ export default function Zones() {
 
   return (
     <div className="container py-3">
-      <h3 className="mb-3">Manage Multiple Plant Zones</h3>
+      <h3 className="mb-3">{t('zones.title')}</h3>
 
       <Row className="g-3 mb-3">
         <Col md={6}>
           <Form onSubmit={onCreate} className="border p-3 rounded">
-            <h6>Tạo khu vườn</h6>
+            <h6>{t('zones.createZone')}</h6>
             <Form.Group className="mb-2">
-              <Form.Label>Tên</Form.Label>
+              <Form.Label>{t('zones.zoneName')}</Form.Label>
               <Form.Control value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})}/>
             </Form.Group>
             <Form.Group className="mb-2">
-              <Form.Label>Mô tả</Form.Label>
+              <Form.Label>{t('zones.zoneDescription')}</Form.Label>
               <Form.Control value={form.description} onChange={(e)=>setForm({...form, description:e.target.value})}/>
             </Form.Group>
-            <Button type="submit">Thêm</Button>
+            <Button type="submit">{t('common.add')}</Button>
           </Form>
         </Col>
         <Col md={6}>
           <div className="border p-3 rounded">
-            <h6>Thiết bị chưa gán</h6>
+            <h6>{t('zones.unassignedDevices')}</h6>
             <Table size="sm" bordered hover>
-              <thead><tr><th>Device</th><th>Loại</th><th>Gán vào</th></tr></thead>
+              <thead><tr><th>{t('zones.device')}</th><th>{t('zones.deviceType')}</th><th>{t('zones.assignTo')}</th></tr></thead>
               <tbody>
                 {devices.map(d=>(
                   <tr key={d.id}>
@@ -87,15 +89,15 @@ export default function Zones() {
                     </td>
                   </tr>
                 ))}
-                {!devices.length && <tr><td colSpan={3} className="text-muted">Không còn thiết bị trống</td></tr>}
+                {!devices.length && <tr><td colSpan={3} className="text-muted">{t('zones.noDevices')}</td></tr>}
               </tbody>
             </Table>
-            <h6 className="mt-3">Chọn bơm cho Zone</h6>
+            <h6 className="mt-3">{t('zones.selectPump')}</h6>
             <Row className="g-2">
               {zones.map(z=>(
                 <Col sm={6} key={z.id}>
                   <Form.Select onChange={(e)=>assignPump(z.id, e.target.value)}>
-                    <option value="">-- Gán bơm cho {z.name} --</option>
+                    <option value="">{t('zones.assignPump', { zone: z.name })}</option>
                     {pumps.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
                   </Form.Select>
                 </Col>
@@ -109,21 +111,21 @@ export default function Zones() {
         {zones.map(z=>(
           <Tab key={z.id} eventKey={String(z.id)} title={z.name}>
             <div className="d-flex justify-content-between align-items-center mb-2">
-              <div><strong>Mô tả:</strong> {z.description || "-"}</div>
-              <Button variant="outline-danger" size="sm" onClick={()=>onDelete(z.id)}>Xóa zone</Button>
+              <div><strong>{t('zones.zoneDescription')}:</strong> {z.description || "-"}</div>
+              <Button variant="outline-danger" size="sm" onClick={()=>onDelete(z.id)}>{t('zones.deleteZone')}</Button>
             </div>
-            <h6>Thiết bị trong zone</h6>
+            <h6>{t('zones.zoneDevices')}</h6>
             <Table bordered size="sm">
-              <thead><tr><th>Tên</th><th>Loại</th><th>Hành động</th></tr></thead>
+              <thead><tr><th>{t('zones.zoneName')}</th><th>{t('zones.deviceType')}</th><th>{t('common.edit')}</th></tr></thead>
               <tbody>
                 {(z.devices||[]).map(d=>(
                   <tr key={d.id}>
                     <td>{d.name}</td>
                     <td><Badge bg="info">{d.type}</Badge></td>
-                    <td><Button size="sm" variant="outline-secondary" onClick={()=>unassignDevice(z.id, d.id)}>Bỏ gán</Button></td>
+                    <td><Button size="sm" variant="outline-secondary" onClick={()=>unassignDevice(z.id, d.id)}>{t('zones.unassign')}</Button></td>
                   </tr>
                 ))}
-                {!z.devices?.length && <tr><td colSpan={3} className="text-muted">Chưa có thiết bị</td></tr>}
+                {!z.devices?.length && <tr><td colSpan={3} className="text-muted">{t('zones.noZoneDevices')}</td></tr>}
               </tbody>
             </Table>
           </Tab>
