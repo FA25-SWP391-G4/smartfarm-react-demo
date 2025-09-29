@@ -27,5 +27,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
-  "proxy": "http://localhost:3010"
+  "proxy": "http://localhost:3010",
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  }
 }

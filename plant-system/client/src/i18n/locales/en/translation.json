@@ -1,0 +1,44 @@
+{
+  "common": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "add": "Add",
+    "edit": "Edit",
+    "save": "Save",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "zones": "Zones",
+    "reports": "Reports",
+    "searchReports": "Search Reports",
+    "thresholds": "Thresholds",
+    "upgrade": "Upgrade",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "zones": {
+    "title": "Manage Multiple Plant Zones",
+    "createZone": "Create Zone",
+    "zoneName": "Name",
+    "zoneDescription": "Description",
+    "devices": "Devices",
+    "unassignedDevices": "Unassigned Devices",
+    "device": "Device",
+    "deviceType": "Type",
+    "assignTo": "Assign to",
+    "noDevices": "No unassigned devices available",
+    "selectPump": "Select pump for Zone",
+    "assignPump": "-- Assign pump for {{zone}} --",
+    "deleteZoneConfirm": "Delete this zone?",
+    "deleteZone": "Delete zone",
+    "zoneDevices": "Devices in zone",
+    "unassign": "Unassign",
+    "noZoneDevices": "No devices in this zone"
+  }
+}
