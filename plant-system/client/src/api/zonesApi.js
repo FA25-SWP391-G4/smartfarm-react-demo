@@ -1,3 +1,5 @@
+import axiosClient from './axiosClient';
+
 const zonesApi = {
   list: () => axiosClient.get("/api/zones"),
   create: (payload) => axiosClient.post("/api/zones", payload),

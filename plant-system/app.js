@@ -159,7 +159,7 @@ var indexRouter = require('./routes/index');        // Basic homepage routes
 var usersRouter = require('./routes/users');        // User management routes (basic)
 var authRouter = require('./routes/auth');          // ✅ UC11: Password reset routes (implemented)
 var paymentRouter = require('./routes/payment');    // ✅ UC19, UC22: VNPay payment integration (implemented)
-var languageRouter = require('./routes/language');  // ✅ UC31: Multi-Language Settings
+// var languageRouter = require('./routes/language');  // ✅ UC31: Multi-Language Settings (commented out due to issues)
 
 // TODO: Create additional route modules for remaining use cases:
 // var dashboardRouter = require('./routes/dashboard');  // 🔄 UC4: Plant monitoring dashboard
@@ -185,13 +185,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// Serve the React client build files
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Mount route handlers
 app.use('/', indexRouter);                          // Basic routes
 app.use('/users', usersRouter);                     // User routes (basic)
 app.use('/auth', authRouter);                       // ✅ UC11: Authentication routes (password reset)
 app.use('/payment', paymentRouter);                 // ✅ UC19, UC22: VNPay payment integration
-app.use('/api/language', languageRouter);           // ✅ UC31: Multi-Language Settings
+// app.use('/api/language', languageRouter);           // ✅ UC31: Multi-Language Settings (commented out due to issues)
 
 // TODO: Mount additional route handlers as they are implemented:
 // app.use('/api/dashboard', dashboardRouter);      // 🔄 UC4: Dashboard API
@@ -211,6 +213,20 @@ app.use('/api/language', languageRouter);           // ✅ UC31: Multi-Language 
 // - CORS for frontend integration
 // - WebSocket setup for real-time features
 // - MQTT client for IoT communication
+
+// Serve React app for client-side routing
+app.get('*', function(req, res, next) {
+  // Skip API routes and existing server routes
+  if (req.path.startsWith('/api/') || 
+      req.path.startsWith('/auth/') || 
+      req.path.startsWith('/users/') ||
+      req.path.startsWith('/payment/')) {
+    return next(createError(404));
+  }
+  
+  // Serve the React app for client-side routes
+  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

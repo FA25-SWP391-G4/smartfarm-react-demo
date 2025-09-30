@@ -10,7 +10,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from '../src/i18n/i18n';
 import Zones from '../src/pages/Zones';
 import Navbar from '../src/components/Navbar';
-import AuthProvider from '../src/auth/AuthContext';
+import { AuthProvider } from '../src/auth/AuthContext';
 
 // Mock the authentication context and APIs
 jest.mock('../src/auth/AuthContext', () => {
