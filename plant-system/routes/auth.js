@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { 
+    register,
+    login,
+    logout,
+    googleLogin,
     forgotPassword, 
     resetPassword,
     changePassword 
@@ -143,6 +147,18 @@ router.post('/reset-password', resetPassword);
 // - Return logout confirmation
 // SECURITY: Immediate token invalidation, session termination
 
+// UC1: User Registration
+router.post('/register', register);
+
+// UC2: User Login
+router.post('/login', login);
+
+// UC2: Google Login (alternate authentication method)
+router.post('/google-login', googleLogin);
+
+// UC3: User Logout
+router.post('/logout', authMiddleware, logout);
+
 // UC12: Change Password - Authenticated endpoint
 // Protected by authMiddleware - requires valid JWT token
 router.put('/change-password', authMiddleware, changePassword);
@@ -150,9 +166,6 @@ router.put('/change-password', authMiddleware, changePassword);
 // UC13: Manage Profile - Moved to userController/userRoutes for better organization
 // router.get('/profile', requireAuth, getProfile);
 // router.put('/profile', requireAuth, updateProfile);
-
-// 🔄 UC1: User Registration (if needed in future)
-// router.post('/register', register);
 
 // 🔄 UC3: User Logout (client-side JWT clearing, no backend needed)
 
