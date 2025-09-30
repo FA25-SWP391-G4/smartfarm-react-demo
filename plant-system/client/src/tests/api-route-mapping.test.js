@@ -9,16 +9,21 @@
  * 3. The data format sent by frontend matches what the backend expects
  */
 
-const authApi = require('../api/authApi').default;
-const axiosClient = require('../api/axiosClient').default;
+import authApi from '../api/authApi';
+import axiosClient from '../api/axiosClient';
 
 // Mock axiosClient
-jest.mock('../api/axiosClient', () => ({
-  get: jest.fn().mockResolvedValue({ data: {} }),
-  post: jest.fn().mockResolvedValue({ data: {} }),
-  put: jest.fn().mockResolvedValue({ data: {} }),
-  delete: jest.fn().mockResolvedValue({ data: {} })
-}));
+jest.mock('../api/axiosClient', () => {
+  return {
+    __esModule: true,
+    default: {
+      get: jest.fn().mockResolvedValue({ data: {} }),
+      post: jest.fn().mockResolvedValue({ data: {} }),
+      put: jest.fn().mockResolvedValue({ data: {} }),
+      delete: jest.fn().mockResolvedValue({ data: {} })
+    }
+  };
+});
 
 describe('API Route Mapping', () => {
   beforeEach(() => {

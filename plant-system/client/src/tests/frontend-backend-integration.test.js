@@ -7,6 +7,19 @@ import Register from '../pages/Register';
 import ForgotPassword from '../pages/ForgotPassword';
 import authApi from '../api/authApi';
 
+// Mock axiosClient first (since authApi depends on it)
+jest.mock('../api/axiosClient', () => {
+  return {
+    __esModule: true,
+    default: {
+      get: jest.fn().mockResolvedValue({ data: {} }),
+      post: jest.fn().mockResolvedValue({ data: {} }),
+      put: jest.fn().mockResolvedValue({ data: {} }),
+      delete: jest.fn().mockResolvedValue({ data: {} })
+    }
+  };
+});
+
 // Mock the auth API
 jest.mock('../api/authApi');
 

@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 // Since we're not sure of Navbar's implementation, let's set up a mock version
-jest.mock('./Navbar', () => {
+jest.mock('../components/Navbar', () => {
   // Return a simple mock component for testing
   return () => <nav data-testid="navbar-test">Navbar Component</nav>;
 });

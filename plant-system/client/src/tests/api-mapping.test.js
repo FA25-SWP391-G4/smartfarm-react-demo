@@ -1,23 +1,38 @@
 // src/tests/api-mapping.test.js
-import axios from 'axios';
 import authApi from '../api/authApi';
+import axiosClient from '../api/axiosClient';
 
-// Mock axios
-jest.mock('axios');
+// Mock axiosClient
+jest.mock('../api/axiosClient', () => {
+  return {
+    __esModule: true,
+    default: {
+      get: jest.fn().mockResolvedValue({ data: {} }),
+      post: jest.fn().mockResolvedValue({ data: {} }),
+      put: jest.fn().mockResolvedValue({ data: {} }),
+      delete: jest.fn().mockResolvedValue({ data: {} })
+    }
+  };
+});
 
 // Helper function to check API path consistency
 const checkApiMapping = (frontendFunction, expectedBackendPath, requestData, httpMethod = 'post') => {
-  // Setup axios mock response
-  axios[httpMethod].mockResolvedValue({ data: { success: true } });
+  // Setup axiosClient mock response
+  axiosClient[httpMethod].mockResolvedValue({ data: { success: true } });
   
   // Call the frontend API function
   return frontendFunction(requestData)
     .then(response => {
-      // Verify axios was called with the expected path
-      expect(axios[httpMethod]).toHaveBeenCalledWith(
-        expectedBackendPath,
-        expect.anything()
-      );
+      // Special case for logout which doesn't send a request body
+      if (expectedBackendPath === '/auth/logout' && !requestData) {
+        expect(axiosClient[httpMethod]).toHaveBeenCalledWith(expectedBackendPath);
+      } else {
+        // Verify axiosClient was called with the expected path
+        expect(axiosClient[httpMethod]).toHaveBeenCalledWith(
+          expectedBackendPath,
+          expect.anything()
+        );
+      }
       return response;
     });
 };
@@ -65,7 +80,7 @@ describe('API Mapping Tests', () => {
       return checkApiMapping(
         () => authApi.logout(),
         '/auth/logout',
-        {}
+        null
       );
     });
     

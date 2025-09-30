@@ -14,7 +14,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
-
+    
+    // BREAKPOINT: Add breakpoint here to debug authentication initialization
+    console.log("Auth initialization - Token exists:", !!token, "User exists:", !!storedUser);
+    
     if (token && storedUser) {
       try {
         setUser(JSON.parse(storedUser));

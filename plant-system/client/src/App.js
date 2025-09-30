@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './auth/AuthContext';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './auth/AuthContext';
 
 // Pages
 import Login from './pages/Login';
@@ -27,27 +27,47 @@ import Footer from './components/Footer';
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { user, isAuthenticated } = useAuth();
   
+  // Debug: Log protected route access
+  console.log('ProtectedRoute - Path:', window.location.pathname, '- Auth:', isAuthenticated, '- Role Required:', requiredRole, '- User Role:', user?.role);
+  
+  // BREAKPOINT: Add breakpoint on the next line to debug protected routes
   if (!isAuthenticated) {
     // Redirect to login if not authenticated
-    return <Navigate to="/login" />;
+    console.log('ProtectedRoute - Redirecting to login (not authenticated)');
+    return <Navigate to="/login" replace />;
   }
   
   if (requiredRole && user?.role !== requiredRole) {
     // Redirect to dashboard if role doesn't match
-    return <Navigate to="/" />;
+    console.log('ProtectedRoute - Redirecting to dashboard (role mismatch)');
+    return <Navigate to="/" replace />;
   }
   
+  console.log('ProtectedRoute - Access granted');
   return children;
 };
 
 function App() {
+  const { isAuthenticated, user } = useAuth();
+  
+  // Debug point - Log authentication state
+  console.log('App rendering - Authentication state:', { 
+    isAuthenticated, 
+    user, 
+    path: window.location.pathname 
+  });
+  
+  // BREAKPOINT: Add breakpoint here to debug the App component render cycle
+  
   return (
-    <AuthProvider>
-      <Router>
-        <div className="d-flex flex-column min-vh-100">
-          <Navbar />
-          <main className="flex-grow-1">
-            <Routes>
+    <div className="d-flex flex-column min-vh-100">
+      <Navbar />
+      <main className="flex-grow-1">
+        {/* Debug element to show current auth state */}
+        <div style={{ position: 'fixed', bottom: '10px', right: '10px', background: '#f0f0f0', padding: '5px', fontSize: '12px', zIndex: 9999 }}>
+          Debug: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'} | Path: {window.location.pathname}
+        </div>
+        <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -65,11 +85,7 @@ function App() {
                   <ChangePassword />
                 </ProtectedRoute>
               } />
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
+              {/* Root path removed here - defined explicitly below */}
               <Route path="/reports" element={
                 <ProtectedRoute>
                   <Reports />
@@ -108,14 +124,33 @@ function App() {
               {/* Test Routes */}
               <Route path="/api-test" element={<ApiTester />} />
               
-              {/* Default route - redirects to Dashboard */}
-              <Route path="*" element={<Navigate to="/" />} />
+              {/* Explicit index route with debug */}
+              <Route path="/" element={
+                <React.Fragment>
+                  {console.log('Root route / accessed - Auth State:', isAuthenticated)}
+                  {/* BREAKPOINT: Add breakpoint on the next line to debug routing */}
+                  {isAuthenticated ? 
+                    <Dashboard /> :
+                    <Navigate to="/login" replace />
+                  }
+                </React.Fragment>
+              } />
+              
+              {/* Catch-all route - redirects to Login if not authenticated, Dashboard otherwise */}
+              <Route path="*" element={
+                <React.Fragment>
+                  {console.log('404 Route - Auth State:', isAuthenticated, 'Path:', window.location.pathname)}
+                  {/* BREAKPOINT: Add breakpoint here to catch 404 routes */}
+                  {isAuthenticated ? 
+                    <Navigate to="/" /> :
+                    <Navigate to="/login" />
+                  }
+                </React.Fragment>
+              } />
             </Routes>
           </main>
           <Footer />
         </div>
-      </Router>
-    </AuthProvider>
   );
 }
 
